@@ -6,12 +6,12 @@ import {
   TransformerSchemaVisitStepContextProvider,
   TransformerTransformSchemaStepContextProvider,
 } from '@aws-amplify/graphql-transformer-interfaces';
-import { DynamoDbDataSource, LambdaDataSource, CfnResolver, CfnDataSource } from '@aws-cdk/aws-appsync';
-import { Table } from '@aws-cdk/aws-dynamodb';
-import { IFunction } from '@aws-cdk/aws-lambda';
+import { DynamoDbDataSource, LambdaDataSource, CfnResolver, CfnDataSource } from 'aws-cdk-lib/aws-appsync';
+import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import {
-  CfnCondition, CfnParameter, Fn, IConstruct,
-} from '@aws-cdk/core';
+  CfnCondition, CfnParameter, Fn,
+} from 'aws-cdk-lib/core';
 import { DirectiveNode, FieldDefinitionNode, ObjectTypeDefinitionNode } from 'graphql';
 import {
   ResourceConstants,
@@ -28,6 +28,7 @@ import { createParametersStack as createParametersInStack } from './cdk/create-c
 import { setMappings } from './cdk/create-layer-cfnMapping';
 import { createEventSourceMapping, createLambda, createLambdaRole } from './cdk/create-streaming-lambda';
 import { AlgoliaDirectiveArgs, FieldList } from './directive-args';
+import { IConstruct } from 'constructs';
 
 const STACK_NAME = 'AlgoliaStack';
 const directiveName = "algolia";
@@ -71,11 +72,11 @@ export class AlgoliaTransformer extends TransformerPluginBase {
     // creates region mapping for stack
     setMappings(stack);
 
-    const envParam = context.stackManager.getParameter(Env) as CfnParameter;
+    // const envParam = context.stackManager.getParameter(Env) as CfnParameter;
     // eslint-disable-next-line no-new
-    new CfnCondition(stack, HasEnvironmentParameter, {
-      expression: Fn.conditionNot(Fn.conditionEquals(envParam, ResourceConstants.NONE)),
-    });
+    // new CfnCondition(stack, HasEnvironmentParameter, {
+    //   expression: Fn.conditionNot(Fn.conditionEquals(envParam, ResourceConstants.NONE)),
+    // });
 
     stack.templateOptions.description = 'An auto-generated nested stack for algolia.';
     stack.templateOptions.templateFormatVersion = '2010-09-09';
@@ -87,7 +88,7 @@ export class AlgoliaTransformer extends TransformerPluginBase {
     const defaultSettingsParams = this.searchableObjectTypeDefinitions.reduce((acc, { fieldNameRaw, directiveArguments }) => {
       return { [fieldNameRaw]: directiveArguments.settings, ...acc }
     }, {} as Record<string, string>);
-    const parameterMap = createParametersInStack(context.stackManager.rootStack, defaultFieldParams, defaultSettingsParams);
+    const parameterMap = createParametersInStack(context.stackManager.getStack(STACK_NAME), defaultFieldParams, defaultSettingsParams);
 
 
     // streaming lambda role
@@ -162,7 +163,7 @@ const validateModelDirective = (object: ObjectTypeDefinitionNode): void => {
   }
 }
 
-const getTable = (context: TransformerContextProvider, definition: ObjectTypeDefinitionNode): {table:IConstruct, tableConfig:CfnDataSource.DynamoDBConfigProperty} => {
+const getTable = (context: TransformerContextProvider, definition: ObjectTypeDefinitionNode): {table: IConstruct, tableConfig:CfnDataSource.DynamoDBConfigProperty} => {
   const ddbDataSource = context.dataSources.get(definition) as DynamoDbDataSource;
   const tableName = ModelResourceIDs.ModelTableResourceID(definition.name.value);
   const table = ddbDataSource.ds.stack.node.findChild(tableName);

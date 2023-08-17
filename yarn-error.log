@@ -1,0 +1,107 @@
+Arguments: 
+  /Users/mateibaciu/.nvm/versions/node/v18.15.0/bin/node /Users/mateibaciu/.nvm/versions/node/v18.15.0/bin/yarn
+
+PATH: 
+  /Users/mateibaciu/.sdkman/candidates/kotlin/current/bin:/opt/homebrew/opt/php@7.4/bin:/Users/mateibaciu/.nvm/versions/node/v18.15.0/bin:/Library/Frameworks/Python.framework/Versions/3.11/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/MacGPG2/bin:/opt/X11/bin:/Library/Apple/usr/bin:/Users/mateibaciu/WebstormProjects/algolia_transformer/node_modules/.bin:/Users/mateibaciu/devsdk/flutter/bin:/Users/mateibaciu/go:/Users/mateibaciu/go/bin:/opt/homebrew/anaconda3/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.15.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  SyntaxError: /Users/mateibaciu/WebstormProjects/algolia_transformer/package.json: Unexpected token s in JSON at position 1869
+      at JSON.parse (<anonymous>)
+      at /Users/mateibaciu/.nvm/versions/node/v18.15.0/lib/node_modules/yarn/lib/cli.js:1629:59
+      at Generator.next (<anonymous>)
+      at step (/Users/mateibaciu/.nvm/versions/node/v18.15.0/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /Users/mateibaciu/.nvm/versions/node/v18.15.0/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "graphql-algolia-transformer",
+    "version": "2.1.0",
+    "description": "Amplify GraphQL @algolia transformer",
+    "author": "Chris Finn <chris@thefinnternet.com>",
+    "license": "MIT",
+    "scripts": {
+      "build": "tsc && cd algolia-lambda/package && zip -qr ../deployment-package.zip . && cd .. && zip -qg  deployment-package.zip python_algolia_function.py && mv deployment-package.zip ../lib/algolia-lambda.zip",
+      "test": "jest",
+      "lambda": "cp algolia-lambda/python_algolia_function.py algolia-lambda/package && sam local invoke -e ./events/event.json && rm algolia-lambda/package/python_algolia_function.py",
+      "prepublishOnly": "npm run build",
+      "preversion": "npm run test",
+      "version": "auto-changelog --breaking-pattern \"BREAKING CHANGE:\" -p && git add CHANGELOG.md",
+      "postversion": "git push origin main --force --tags && npm publish",
+      "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
+    },
+    "main": "./dist/index.js",
+    "files": [
+      "dist",
+      "lib"
+    ],
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/thefinnomenon/graphql-algolia-transformer.git"
+    },
+    "bugs": {
+      "url": "https://github.com/thefinnomenon/graphql-algolia-transformer/issues"
+    },
+    "homepage": "https://github.com/thefinnomenon/graphql-algolia-transformer#readme",
+    "keywords": [
+      "aws",
+      "amplify",
+      "grapqhl",
+      "algolia",
+      "search",
+      "serverless",
+      "transformer",
+      "dynamodb"
+    ],
+    "devDependencies": {
+      "@aws-cdk/assert": "~1.124.0",
+      "@types/node": "^12.12.6",
+      "auto-changelog": "^2.2.1",
+      "jest": "^26.6.0",
+      "prettier": "^2.1.2",
+      "ts-jest": "^26.4.1",
+      "typescript": "^4.0.3"
+    },
+    "dependencies": {
+      "@aws-amplify/amplify-cli-core": "^4.2.4",
+      "@aws-amplify/graphql-model-transformer": "0.15.6",
+      "@aws-amplify/graphql-transformer-core": "^2.1.0",
+  s    "aws-cdk": "^2.92.0",
+      "graphql": "^15.8.0",
+      "graphql-mapping-template": "^4.20.8",
+      "graphql-transformer-common": "^4.24.5"
+    },
+    "jest": {
+      "transform": {
+        "^.+\\.tsx?$": "ts-jest"
+      },
+      "testURL": "http://localhost",
+      "testRegex": "(src/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+      "moduleFileExtensions": [
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "node"
+      ],
+      "collectCoverage": true,
+      "modulePathIgnorePatterns": [
+        "overrides"
+      ]
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

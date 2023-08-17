@@ -1,5 +1,5 @@
 import { ResourceConstants } from 'graphql-transformer-common';
-import { CfnParameter, Stack } from '@aws-cdk/core';
+import { CfnParameter, Stack } from 'aws-cdk-lib/core';
 import { FieldList } from '../directive-args';
 
   const AlgoliaAppId = "AlgoliaAppId";
