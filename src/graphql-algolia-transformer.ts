@@ -72,11 +72,11 @@ export class AlgoliaTransformer extends TransformerPluginBase {
     // creates region mapping for stack
     setMappings(stack);
 
-    // const envParam = context.stackManager.getParameter(Env) as CfnParameter;
+    const envParam = context.stackManager.getParameter(Env) as CfnParameter;
     // eslint-disable-next-line no-new
-    // new CfnCondition(stack, HasEnvironmentParameter, {
-    //   expression: Fn.conditionNot(Fn.conditionEquals(envParam, ResourceConstants.NONE)),
-    // });
+    new CfnCondition(stack, HasEnvironmentParameter, {
+      expression: Fn.conditionNot(Fn.conditionEquals(envParam, ResourceConstants.NONE)),
+    });
 
     stack.templateOptions.description = 'An auto-generated nested stack for algolia.';
     stack.templateOptions.templateFormatVersion = '2010-09-09';

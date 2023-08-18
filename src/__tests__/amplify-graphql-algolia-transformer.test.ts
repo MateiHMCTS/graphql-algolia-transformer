@@ -26,19 +26,13 @@ test('AlgoliaTransformer validation happy case', () => {
     `;
   const transformer = new GraphQLTransform({
     transformers: [new ModelTransformer(), new AlgoliaTransformer()],
+    featureFlags
   });
-  console.log(transformer);
-  transformer.transform({
-    assetProvider: undefined,
-    nestedStackProvider: undefined,
-    scope: undefined,
-    synthParameters: undefined,
-    schema: validSchema }
-  )
-  // const out = transformer.transform(validSchema);
-  // expect(out).toBeDefined();
-  // parse(out.schema);
-  // expect(out.schema).toMatchSnapshot();
+
+  const out = transformer.transform(validSchema);
+  expect(out).toBeDefined();
+  parse(out.schema);
+  expect(out.schema).toMatchSnapshot();
 });
 //
 // test('AlgoliaTransformer vtl', () => {
